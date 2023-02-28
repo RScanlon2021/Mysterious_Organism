@@ -51,13 +51,11 @@ pAequorFactory.prototype.compareDNA = function (obj) {
 
 function collection() {
   let dnaCollection = [];
-  let idCounter = 1;
   while (dnaCollection.length < 30) {
     let newDna = new pAequorFactory(uniqueId(), mockUpStrand());
     if (newDna.willLikelySurvive()) {
       dnaCollection.push(newDna);
     }
-    idCounter++;
   }
   return dnaCollection;
 }
