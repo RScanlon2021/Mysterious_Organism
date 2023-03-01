@@ -17,24 +17,26 @@ const mockUpStrand = () => {
   return newStrand;
 };
 
-function pAequorFactory(specID, sequence) {
-  this.specimenNum = specID;
-  this.dna = sequence;
-  this.willLikelySurvive = function () {
-    let subArr = this.dna.filter((base) => base == 'C' || base == 'G').length;
-    let survivability = Math.floor((subArr / 15) * 100);
-    return survivability >= 60;
-  };
-  this.mutate = function () {
-    let dnaBases = ['A', 'T', 'C', 'G'];
-    let randomBaseIndex = Math.floor(Math.random() * 15);
-    altDnaBases = dnaBases.filter((base) => base !== this.dna[randomBaseIndex]);
-    this.dna[randomBaseIndex] = `*${
-      altDnaBases[Math.floor(Math.random() * 3)]
-    }`;
-    return this.dna;
-  };
+class pAequorFactory {
+  constructor(specID, sequence) {
+    this.specimenNum = specID;
+    this.dna = sequence;
+  }
 }
+
+pAequorFactory.prototype.mutate = function () {
+  let dnaBases = ['A', 'T', 'C', 'G'];
+  let randomBaseIndex = Math.floor(Math.random() * 15);
+  altDnaBases = dnaBases.filter((base) => base !== this.dna[randomBaseIndex]);
+  this.dna[randomBaseIndex] = `*${altDnaBases[Math.floor(Math.random() * 3)]}`;
+  return this.dna;
+};
+
+pAequorFactory.prototype.willLikelySurvive = function () {
+  let subArr = this.dna.filter((base) => base == 'C' || base == 'G').length;
+  let survivability = Math.floor((subArr / 15) * 100);
+  return survivability >= 60;
+};
 
 pAequorFactory.prototype.compareDNA = function (obj) {
   let commonDna = 0;
@@ -45,7 +47,7 @@ pAequorFactory.prototype.compareDNA = function (obj) {
   }
   commonDna = Math.floor((commonDna / 15) * 100);
   console.log(
-    `Specimen #1 and specimen #2 share ${commonDna}% of DNA in common.`
+    `Specimen ${this.specimenNum} and specimen ${obj.specimenNum} share ${commonDna}% of DNA in common.`
   );
 };
 
@@ -62,4 +64,7 @@ function collection() {
 
 const sampleCollection = collection();
 
-// console.log(sampleCollection[29].compareDNA(sampleCollection[18]));
+console.log(sampleCollection);
+console.log(sampleCollection[29].compareDNA(sampleCollection[18]));
+console.log(sampleCollection[7].mutate());
+console.log(sampleCollection[13].willLikelySurvive());
